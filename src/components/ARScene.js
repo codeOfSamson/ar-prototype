@@ -4,17 +4,25 @@ import React from "react";
 const ARScene = () => {
   return (
     <div className="ar-container">
-      <model-viewer
-        src="/assets/globe.glb"  // Replace with your .glb/.gltf file path
-        alt="A 3D model of an NPC"
-        ar
-        ar-modes="scene-viewer webxr"
-        camera-controls
-        shadow-intensity="1"
-        environment-image="neutral"
-        auto-rotate
-        style={{ width: "100%", height: "500px" }}
-      ></model-viewer>
+  <model-viewer
+  src="/assets/globe.glb"
+ ios-src="/assets/globe.usdz"
+  alt="A 3D model of a chair"
+  ar
+  ar-modes="scene-viewer webxr quick-look"
+  ar-placement="floor"
+  camera-controls
+  environment-image="neutral"
+  shadow-intensity="1"
+  auto-rotate
+  autoplay
+  style={{ width: "100%", height: "500px" }}
+>
+<button slot="ar-button" style={{ padding: "10px", background: "blue", color: "white" }}>
+    View in AR
+  </button>
+</model-viewer>
+
     </div>
   );
 };
