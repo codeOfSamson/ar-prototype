@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 
 const ARScene = () => {
   // Set the target GPS coordinates (example: a specific location in latitude and longitude)
-  const targetLatitude = 24.855636; // Target latitude
-  const targetLongitude = 121.830489; // Target longitude (e.g., San Francisco)
+  const targetLatitude =  24.858529;//Target latitude
+  const targetLongitude = 121.824833; // Target longitude (e.g., San Francisco)
 
-   
+
   const [isClose, setIsClose] = useState(false); // State to track if user is close to target location
 
   // Function to calculate the distance between two GPS coordinates
