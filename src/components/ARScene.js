@@ -1,10 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 
 const ARScene = () => {
   // Set the target GPS coordinates (example: a specific location in latitude and longitude)
-  const targetLatitude =  24.858529;//Target latitude
-  const targetLongitude = 121.824833; // Target longitude (e.g., San Francisco)
+  //currently cat by pond coords
+  // const targetLatitude =  24.858529;//Target latitude
+  // const targetLongitude = 121.824833; // Target longitude (e.g., San Francisco)
 
+//home
+  const targetLatitude = 24.855636; // Target latitude
+  const targetLongitude = 121.830489; 
 
   const [isClose, setIsClose] = useState(false); // State to track if user is close to target location
 
@@ -42,6 +46,16 @@ const ARScene = () => {
     });
   }, []);
 
+
+  const audioRef = useRef(null);
+
+  const handleAnimationPlay = (e) => {
+    if (audioRef.current) {
+      audioRef.current.play(); // Play audio when animation starts
+    }
+  };
+
+
   return (
     <div className="ar-container">
       {isClose ? (
@@ -49,6 +63,7 @@ const ARScene = () => {
           src="/assets/student.glb"
           ios-src="/assets/student.usdz"
           alt="A 3D model of a chair"
+          onClick={(e)=>{handleAnimationPlay(e)}}
           ar
           ar-modes="scene-viewer webxr quick-look"
           ar-placement="floor"
@@ -73,6 +88,8 @@ const ARScene = () => {
       ) : (
         <p>Please move closer to the target location to view the model in AR.</p>
       )}
+            <audio ref={audioRef} src="/assets/audio/mings.mp3" />
+
     </div>
   );
 };
