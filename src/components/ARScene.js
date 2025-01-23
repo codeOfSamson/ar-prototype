@@ -1,20 +1,15 @@
 import React, { useEffect, useState, useRef } from "react";
 
 const ARScene = () => {
-  // Set the target GPS coordinates (example: a specific location in latitude and longitude)
-  //currently cat by pond coords
-  // const targetLatitude =  24.858529;//Target latitude
-  // const targetLongitude = 121.824833; // Target longitude (e.g., San Francisco)
+  const targetLatitude = 24.855636;
+  const targetLongitude = 121.830489;
 
-//home
-  const targetLatitude = 24.855636; // Target latitude
-  const targetLongitude = 121.830489; 
+  const [isClose, setIsClose] = useState(false);
+  const audioRef = useRef(null);
+  const modelViewerRef = useRef(null);
 
-  const [isClose, setIsClose] = useState(false); // State to track if user is close to target location
-
-  // Function to calculate the distance between two GPS coordinates
   const haversine = (lat1, lon1, lat2, lon2) => {
-    const R = 6371; // Radius of Earth in km
+    const R = 6371;
     const dLat = ((lat2 - lat1) * Math.PI) / 180;
     const dLon = ((lon2 - lon1) * Math.PI) / 180;
     const a =
@@ -24,54 +19,71 @@ const ARScene = () => {
         Math.sin(dLon / 2) *
         Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    const distance = R * c; // Distance in km
-    return distance * 1000; // Return distance in meters
+    const distance = R * c;
+    return distance * 1000;
   };
 
   useEffect(() => {
-    // Get user's current location using the Geolocation API
-    navigator.geolocation.getCurrentPosition((position) => {
-      const userLatitude = position.coords.latitude;
-      const userLongitude = position.coords.longitude;
+    const watchId = navigator.geolocation.watchPosition(
+      (position) => {
+        const userLatitude = position.coords.latitude;
+        const userLongitude = position.coords.longitude;
+        const distance = haversine(userLatitude, userLongitude, targetLatitude, targetLongitude);
+        setIsClose(distance < 50);
+      },
+      (error) => {
+        console.error("Error watching position:", error);
+      },
+      { enableHighAccuracy: true }
+    );
 
-      // Calculate the distance to the target coordinates
-      const distance = haversine(userLatitude, userLongitude, targetLatitude, targetLongitude);
-
-      // If the distance is less than 50 meters, allow the model to show in AR
-      if (distance < 50) {
-        setIsClose(true); // User is close to the target location
-      } else {
-        setIsClose(false); // User is too far
-      }
-    });
+    return () => {
+      navigator.geolocation.clearWatch(watchId);
+    };
   }, []);
 
+  const playAudioAndAnimation = () => {
+    if (audioRef.current && modelViewerRef.current) {
+      const audioDuration = audioRef.current.duration * 1000; // Audio duration in milliseconds
+      const animationDuration = modelViewerRef.current.getAttribute("animation-duration") || 3000; // Default to 3 seconds if undefined
 
-  const audioRef = useRef(null);
+      // Play both audio and animation
+      audioRef.current.play();
+      modelViewerRef.current.play();
 
-  const handleAnimationPlay = (e) => {
-    if (audioRef.current) {
-      audioRef.current.play(); // Play audio when animation starts
+      // Stop animation and audio after the longer of the two durations
+      const duration = Math.max(audioDuration, animationDuration);
+      setTimeout(() => {
+        stopAnimation();
+      }, duration);
     }
   };
 
+  const stopAnimation = () => {
+    if (modelViewerRef.current) {
+      modelViewerRef.current.pause(); // Stop animation
+    }
+    if (audioRef.current) {
+      audioRef.current.pause(); // Stop audio
+      audioRef.current.currentTime = 0; // Reset audio to the beginning
+    }
+  };
 
   return (
     <div className="ar-container">
-      {isClose ? (
+      {/* {isClose ? (
         <model-viewer
+          ref={modelViewerRef}
           src="/assets/student.glb"
           ios-src="/assets/student.usdz"
-          alt="A 3D model of a chair"
-          onClick={(e)=>{handleAnimationPlay(e)}}
+          alt="A 3D model of a student"
           ar
           ar-modes="scene-viewer webxr quick-look"
           ar-placement="floor"
           camera-controls
-          environment-image="neutral"
+          //environment-image="/assets/environment.hdr"
           shadow-intensity="1"
-          auto-rotate
-          autoplay
+          animation-name="Idle" // Specify the animation name
           style={{ width: "100%", height: "500px" }}
         >
           <button
@@ -80,16 +92,82 @@ const ARScene = () => {
               padding: "10px",
               background: "blue",
               color: "white",
+              position: "absolute",
+              bottom: "10px",
+              left: "50%",
+              transform: "translateX(-50%)",
             }}
           >
             View in AR
           </button>
+
+          <button
+            slot="hotspot-1"
+            data-position="0m 0m 0m"
+            data-normal="0m 1m 0m"
+            style={{
+              padding: "10px",
+              background: "green",
+              color: "white",
+              border: "none",
+              borderRadius: "5px",
+              cursor: "pointer",
+            }}
+            onClick={playAudioAndAnimation}
+          >
+            Replay Audio & Animation
+          </button>
         </model-viewer>
       ) : (
         <p>Please move closer to the target location to view the model in AR.</p>
-      )}
-            <audio ref={audioRef} src="/assets/audio/mings.mp3" />
+      )} */}
+    <model-viewer
+          ref={modelViewerRef}
+          src="/assets/student.glb"
+          //ios-src="/assets/student.usdz"
+          alt="A 3D model of a student"
+          ar
+          ar-modes="scene-viewer webxr quick-look"
+          ar-placement="floor"
+          camera-controls
+          //environment-image="/assets/environment.hdr"
+          shadow-intensity="1"
+          animation-name="Idle" // Specify the animation name
+          style={{ width: "100%", height: "1000px" }}
+        >
+          <button
+            slot="ar-button"
+            style={{
+              padding: "10px",
+              background: "blue",
+              color: "white",
+              position: "absolute",
+              bottom: "10px",
+              left: "50%",
+              transform: "translateX(-50%)",
+            }}
+          >
+            View in AR
+          </button>
 
+          <button
+            slot="hotspot-1"
+            data-position="0m 1m 0m"
+            data-normal="0m 1m 0m"
+            style={{
+              padding: "10px",
+              background: "green",
+              color: "white",
+              border: "none",
+              borderRadius: "5px",
+              cursor: "pointer",
+            }}
+            onClick={playAudioAndAnimation}
+          >
+            Replay Audio & Animation
+          </button>
+        </model-viewer>
+      <audio ref={audioRef} src="/assets/audio/mings.mp3" />
     </div>
   );
 };
