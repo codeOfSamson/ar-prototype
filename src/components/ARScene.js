@@ -1,8 +1,12 @@
 import React, { useEffect, useState, useRef } from "react";
 
 const ARScene = () => {
-  const targetLatitude = 24.855636;
-  const targetLongitude = 121.830489;
+  // const targetLatitude = 24.855636;
+  // const targetLongitude = 121.830489;
+
+  //xietianlu down the streed
+  const targetLatitude =   24.855794;
+  const targetLongitude = 121.830580;
 
   const [isClose, setIsClose] = useState(false);
   const audioRef = useRef(null);
@@ -24,12 +28,21 @@ const ARScene = () => {
   };
 
   useEffect(() => {
+    // Watch the user's location
     const watchId = navigator.geolocation.watchPosition(
       (position) => {
         const userLatitude = position.coords.latitude;
         const userLongitude = position.coords.longitude;
+  
+        // Calculate the distance to the target coordinates
         const distance = haversine(userLatitude, userLongitude, targetLatitude, targetLongitude);
-        setIsClose(distance < 50);
+  
+        // If the distance is less than 50 meters, allow the model to show in AR
+        if (distance < 5) {
+          setIsClose(true); // User is close to the target location
+        } else {
+          setIsClose(false); // User is too far
+        }
       },
       (error) => {
         console.error("Error watching position:", error);
@@ -71,102 +84,43 @@ const ARScene = () => {
 
   return (
     <div className="ar-container">
-      {/* {isClose ? (
-        <model-viewer
-          ref={modelViewerRef}
-          src="/assets/student.glb"
-          ios-src="/assets/student.usdz"
-          alt="A 3D model of a student"
-          ar
-          ar-modes="scene-viewer webxr quick-look"
-          ar-placement="floor"
-          camera-controls
-          //environment-image="/assets/environment.hdr"
-          shadow-intensity="1"
-          animation-name="Idle" // Specify the animation name
-          style={{ width: "100%", height: "500px" }}
-        >
-          <button
-            slot="ar-button"
-            style={{
-              padding: "10px",
-              background: "blue",
-              color: "white",
-              position: "absolute",
-              bottom: "10px",
-              left: "50%",
-              transform: "translateX(-50%)",
-            }}
-          >
-            View in AR
-          </button>
+      {isClose ? (
+        <div className="stay">
 
-          <button
-            slot="hotspot-1"
-            data-position="0m 0m 0m"
-            data-normal="0m 1m 0m"
-            style={{
-              padding: "10px",
-              background: "green",
-              color: "white",
-              border: "none",
-              borderRadius: "5px",
-              cursor: "pointer",
-            }}
-            onClick={playAudioAndAnimation}
-          >
-            Replay Audio & Animation
-          </button>
-        </model-viewer>
+         <img
+         src="/assets/sandwichTreasure.webp" // Replace with your GIF path
+         alt="treasure"
+         style={{
+           imageRendering: "pixelated",
+           width: "150px",
+         }}
+       />\        
+       <p>Congratulations you have found the hidden sandwich treasure!</p>
+       <p>Now go here: 24°51'24.2"N 121°49'55.0"E to commune with those who have gone before you, came and went, and though such thoughts as:</p>
+       <p>"Fantastic sourdough, insanely good cakes and pies."</p>
+       <p>or</p>
+       <p>"A treasure shop that I discovered by chance when traveling to Yilan! "</p>
+
+       </div>
       ) : (
-        <p>Please move closer to the target location to view the model in AR.</p>
-      )} */}
-    <model-viewer
-          ref={modelViewerRef}
-          src="/assets/student.glb"
-          //ios-src="/assets/student.usdz"
-          alt="A 3D model of a student"
-          ar
-          ar-modes="scene-viewer webxr quick-look"
-          ar-placement="floor"
-          camera-controls
-          //environment-image="/assets/environment.hdr"
-          shadow-intensity="1"
-          animation-name="Idle" // Specify the animation name
-          style={{ width: "100%", height: "1000px" }}
-        >
-          <button
-            slot="ar-button"
-            style={{
-              padding: "10px",
-              background: "blue",
-              color: "white",
-              position: "absolute",
-              bottom: "10px",
-              left: "50%",
-              transform: "translateX(-50%)",
-            }}
-          >
-            View in AR
-          </button>
+        <>
 
-          <button
-            slot="hotspot-1"
-            data-position="0m 1m 0m"
-            data-normal="0m 1m 0m"
-            style={{
-              padding: "10px",
-              background: "green",
-              color: "white",
-              border: "none",
-              borderRadius: "5px",
-              cursor: "pointer",
-            }}
-            onClick={playAudioAndAnimation}
-          >
-            Replay Audio & Animation
-          </button>
-        </model-viewer>
+        <img
+        src="/assets/adventureCat.webp" // Replace with your GIF path
+        alt="Walking Cat"
+        style={{
+          imageRendering: "pixelated",
+          width: "150px",
+        }}
+      
+      />
+
+        <p>Please move closer to the white cat.  Listen to him, trust his guidance....</p>
+        </>
+      )}
+  
+      
+
       <audio ref={audioRef} src="/assets/audio/mings.mp3" />
     </div>
   );
