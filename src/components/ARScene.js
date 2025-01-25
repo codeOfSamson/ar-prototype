@@ -6,7 +6,7 @@ const ARScene = () => {
   const targetLongitude = 121.830580;
 
   const [isClose, setIsClose] = useState(false);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const audioRef = useRef(null);
 
   // Haversine formula to calculate distance between two coordinates
   const haversine = (lat1, lon1, lat2, lon2) => {
