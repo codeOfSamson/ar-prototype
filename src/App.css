@@ -1,5 +1,26 @@
 .App {
   text-align: center;
+  margin: 0;
+  padding: 0;
+  background-color: purple;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100vh;
+}
+
+.game-textbox {
+  background-color: #1e1e1e; /* Dark background */
+  color: #ffffff; /* White text */
+  font-family: 'Press Start 2P', cursive; /* Pixel-style font (game-like) */
+  font-size: 18px; /* Slightly larger text */
+  padding: 10px; /* Padding for some space inside the textbox */
+  border: 2px solid #00ff00; /* Bright green border (game vibe) */
+  border-radius: 5px; /* Slight rounding for smooth edges */
+  box-shadow: 0 0 10px #00ff00; /* Glowing effect around the box */
+  outline: none; /* Remove default focus outline */
+  width: 250px; /* Set width of the textbox */
+  transition: all 0.3s ease-in-out; /* Smooth transition on focus */
 }
 
 .App-logo {
