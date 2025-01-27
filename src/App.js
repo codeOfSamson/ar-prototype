@@ -2,6 +2,7 @@ import './App.css';
 import React, { useState, useRef } from "react";
 import ARScene from "./components/ARScene";
 import { introWelcome } from './speech/intro';
+import LocationTracker from './components/LocationTracker';
 
 function App() {
   const [begin, setBegin] = useState(false)
@@ -38,6 +39,7 @@ function App() {
       <button onClick={(e) => { printStringByWord(e) }} >Trust </button>
       {/* Use the ref for the div */}
       <ARScene />
+      <LocationTracker />
       <div id='game-textbox' ref={myDivRef}></div>
     </div>
   );

@@ -1,11 +1,13 @@
 import React, { useEffect, useState, useRef } from "react";
 
 const ARScene = () => {
+  //nest
+  //24.85577206180976, 121.8306137550298
   // Target location coordinates
-  const targetLatitude = 24.855794;
-  const targetLongitude = 121.830580;
+  const targetLatitude = 24.85577206180976;
+  const targetLongitude = 121.8306137550298;
 
-  const [isClose, setIsClose] = useState (false);
+  const [isClose, setIsClose] = useState(false);
   const audioRef = useRef(null);
 
   // Haversine formula to calculate distance between two coordinates
@@ -16,9 +18,9 @@ const ARScene = () => {
     const a =
       Math.sin(dLat / 2) * Math.sin(dLat / 2) +
       Math.cos((lat1 * Math.PI) / 180) *
-        Math.cos((lat2 * Math.PI) / 180) *
-        Math.sin(dLon / 2) *
-        Math.sin(dLon / 2);
+      Math.cos((lat2 * Math.PI) / 180) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     const distance = R * c; // Distance in km
     return distance * 1000; // Convert to meters
@@ -84,7 +86,7 @@ const ARScene = () => {
       ) : (
         <>
           <img
-            src="/assets/adventureCat.webp"
+            src="/assets/adventureKAt.gif"
             alt="Walking Cat"
             style={{
               imageRendering: "pixelated",
