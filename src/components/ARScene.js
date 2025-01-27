@@ -86,7 +86,7 @@ const ARScene = () => {
       ) : (
         <>
           <img
-            src="/assets/adventureKAt.gif"
+            src="/assets/aKHeadMove.gif"
             alt="Walking Cat"
             style={{
               imageRendering: "pixelated",
